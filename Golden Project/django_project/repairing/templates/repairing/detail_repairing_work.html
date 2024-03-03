@@ -1,0 +1,114 @@
+{% extends 'jewellery/base.html' %}
+
+{% block css %}
+      <title>Repairing Jewellery Detail</title>
+{% endblock %}
+
+{% load humanize %}
+{% load static %}
+{% block content %}
+              <div class="container profile">
+                <div class="row">
+                      <div class="col-12 col-lg-4 col-md-6 pt-3 pb-5">
+                        {% if object.worker_name.owner == user %}
+                                 {% if not object.finish_date %}
+                                      <div class="text-right my-2">
+                                           <a href="{% url 'repairing-update' object.id %}" class="btn btn-outline-dark mr-1 w-100 mb-2">Update</a>
+                                     </div>
+                                 {% endif %}
+                        {% endif%}
+                        <div class="card">
+                                <div class="card-image">
+                                      <img src="{% static 'jewellery/images/default/undraw_authentication_fsn5.png' %}" alt="" class="pt-3">
+                                </div>                     
+                                <div class="profile-image">
+                                       <a href="{% url 'worker-update' object.worker_name.pk %}"><img src="{{object.worker_name.image.url}}" alt=""></a>
+                                </div>
+                                <div class="card-content">
+                                      <a href="{% url 'worker-update' object.worker_name.pk %}"><h2 class="pt-3 slogan">{{object.worker_name.full_name}}</h2></a>
+                                      <h5 class="text-danger event-profile-font">{{object.worker_name.username}}</h5>
+                                      <h5 class="mt-3"><i class="fa fa-phone text-success"></i> <small class="event-profile-font word-break"><a href="tel:+91{{object.worker_name.phone}}" class="ml-2 text-dark"> +91{{object.worker_name.phone}} </a></small></h5>
+                                      <h5><i class="fa fa-envelope text-danger"></i> <small class="event-profile-font word-break ml-2"><a href="mailto:{{object.worker_name.email}}" class="text-dark">{{object.worker_name.email}}</a></small></h5>
+                                      <h5 class="mt-3 text-dark"><i class="fa fa-address-card"></i> <small class="event-profile-font word-break ml-2">Aadhar Card ( {{object.worker_name.aadhar_card}} )</small></h5>
+                                      <h5 class=" text-purple"><small class="event-profile-font word-break ml-2">Skills : ( {{object.worker_name.skills}} )</small></h5>
+                                      <blockquote class="container text-muted event-profile-font ">
+                                        <i class="fa fa-map-o text-secondary"></i>
+                                          {{object.worker_name.address}}
+                                      </blockquote> 
+                                </div>
+                                <div class="footlight-mt-light d-flex justify-content-around h5">
+                                    <div class="text-danger">Loss : {{object.worker_name.loss|floatformat:'-3'}} gm</div>
+                                    <div class="text-success">Paid : {{object.worker_name.paid|floatformat:'-3'}} gm</div>
+                                 </div>
+                                <hr>
+                                <div class="pb-3 d-flex justify-content-around">
+                                    <a href="https://www.google.co.in/maps/dir//{{object.worker_name.state}}/" class="text-dark" target="_blank"><i class="fa fa-map-marker fa-2x text-primary"></i></a>
+                                    <span class="event-profile-font"><a href="https://www.google.co.in/maps/dir//{{object.worker_name.state}}/" class="text-dark" target="_blank">{{object.worker_name.state}}</a></span>
+                                </div>
+                        </div>
+                      </div>        
+                        
+                      <div class="col-12 col-lg-8 col-md-6 shadow-lg py-4">
+                                <fieldset>
+                                       <legend class="border-bottom py-2 slogan pl-3"><big>Jewellery Dashboard</big></legend>
+                                </fieldset>
+
+                                <div class="text-small container row-center mt-3" >
+                                      <div class="row">
+                                            <span class="event-profile-font h6 text-muted col-12 col-lg-6 col-md-6">Work By : <kbd class="bg-primary px-3 event-profile-font">{{object.worker_name.owner.first_name}}</kbd></span>
+                                            {% if object.finish_date %}
+                                                <span class="event-profile-font h6 text-muted col-12 col-lg-6 col-md-6">Status : <kbd class="bg-danger px-3 event-profile-font">Work Finished : {{object.finish_date|date:'d M Y'}}</kbd></span>
+                                            {% else %}
+                                                <span class="event-profile-font h6 text-muted col-12 col-lg-6 col-md-6">Status : <kbd class="bg-success px-3 event-profile-font">Work In Progress</kbd></span>
+                                            {% endif %}
+                                      </div>
+                                      <div class="p-5 shadow mt-3">
+                                            <div class="d-flex">
+                                                    <a href="{% url 'worker-update' object.worker_name.pk %}"><img src="{{object.worker_name.image.url}}" class="img-fluid img-event-profile"></a>
+                                                    <a href="{% url 'worker-update' object.worker_name.pk %}"><h3 class="my-auto ml-3 slogan word-break">{{object.worker_name.full_name}}</h3></a>
+                                            </div>
+                                            <div class="event-profile-font date-margin small-font">{{object.start_date}}</div>
+                                            <div class="ml-5 my-3 event-profile-font">
+                                                  <a href="{% url 'repairing-detail' object.pk %}" class="h1 footlight-mt-light text-dark">{{object.jewellery_name|title}}</a>
+                                            </div>
+                                            {% if object.urgent_work_date %}
+                                                <div class="bg-danger event-profile-font text-center text-white py-2 h6 row-center">Order : {{object.urgent_work_date|date:'d M Y'}}</div>
+                                            {% endif %}
+                                            <div class="h4 word-space my-3 font-weight-bold row text-center text-purple justify-content-around">
+                                                <kbd class="col-12 py-2 bg-warning text-dark col-lg-5 col-md-6 footlight-mt-light mt-1">Total Gold : {{object.total_gold|floatformat:'-3'|intcomma}} gm</kbd>
+                                            </div>
+                                            <div class="h5 word-space my-3 font-weight-bold row text-center text-purple justify-content-around">
+                                                <kbd class="col-12 py-2 bg-warning text-dark col-lg-5 col-md-6 footlight-mt-light mt-1">PAN/KDM : {{object.KDM|floatformat:'-3'}} gm</kbd>
+                                                <kbd class="col-12 py-2 bg-warning text-dark col-lg-5 col-md-6 footlight-mt-light mt-1">Extra Gold : {{object.extra_gold|floatformat:'-3'|intcomma}} gm</kbd>
+                                            </div>                                            
+                                            <div class="h4 word-space my-3 font-weight-bold row text-center justify-content-around">
+                                                <kbd class="col-12 py-2 bg-white text-success col-lg-5 col-md-6 footlight-mt-light mt-1">Net Weight : {{object.jewellery_net_weight|floatformat:'-3'|intcomma}} gm</kbd>
+                                                <kbd class="col-12 py-2 bg-white text-danger col-lg-5 col-md-6 footlight-mt-light mt-1">Gold To Be Given : {{object.gold_to_be_given|floatformat:'-3'|intcomma}} gm</kbd>
+                                            </div>
+                                            <div class="mt-4 event-profile-font">
+                                                <i class="fa fa-clock-o fa-2x mr-2 text-danger"></i>
+                                                <span class="h5">{{object.start_date|naturaltime}}</span>
+                                            </div>
+                                            <br>
+                                            <div class="event-profile-font date-margin h6 text-right">{{object.jewellery_owner_name}}</div>
+                                            {% if object.comment %}
+                                                <div class="event-profile-font text-danger h5">Comment : {{object.comment}}</div>
+                                            {% endif %}
+                                          </div>
+                                </div>
+
+                                <div class="form-group text-center pt-4">
+                                        <a href="{% url 'worker-passbook' object.worker_name.pk %}" class="btn btn-outline-primary event-profile-font mx-1 w-25">Passbook</a>
+                                    {% if not object.finish_date %}
+                                        <a href="{% url 'repairing-submit' object.pk %}" class="btn btn-outline-success event-profile-font mx-1 w-25">Submit Work</a>
+                                    {% endif %}
+                                </div>
+                       </div>
+                  </div>
+          </div>
+{% endblock %}
+
+
+{% load static %}
+{% block js %}
+{% endblock js %}

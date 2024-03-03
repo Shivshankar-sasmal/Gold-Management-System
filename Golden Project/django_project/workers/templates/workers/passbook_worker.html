@@ -1,0 +1,148 @@
+{% extends 'jewellery/base.html' %}
+
+{% block css %}
+      <title>Passbook</title>
+{% endblock %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+              <div class="container-fluid profile">
+                      <h1 class="slogan word-space text-center"><span class="text-warning">GoldsBook </span> Passbook</h1>
+                      <div class="row shadow p-3 container row-center">
+                            <div class="col-12 pt-4">
+                                  <div class="d-flex">
+                                            <a href="{% url 'worker-update' worker.pk %}"><img src="{{worker.image.url}}" class="img-fluid img-event-profile"></a>
+                                            <a href="{% url 'worker-update' worker.pk %}"><h2 class="my-auto ml-3 slogan word-break">{{ worker.full_name }}</h2></a>
+                                  </div>
+                            </div>
+
+                            <div class="col-12 col-lg-7 col-md-7 footlight-mt-light h5 word-space line-height">
+                                  <div class="mb-1 ml-5"><span class="font-weight-bold">Aadhar Card : </span> {{worker.aadhar_card}} </div>
+                                  <div class="mb-1 ml-5"><span class="font-weight-bold">Phone Number : </span> <a href="tel:+91{{worker.phone}}" class="text-danger">+91{{worker.phone}}</a> </div>
+                                  <div class="mb-1 ml-5"><span class="font-weight-bold">Email : </span> <a href="mailto:{{worker.email}}" class="text-danger">{{worker.email}}</a> </div>
+                                  <div class="ml-5"><span class="font-weight-bold">Home Address : </span> {{worker.address}} </div>
+                            </div>
+                            <div class="col-12 col-lg-5 col-md-5 footlight-mt-light h5 word-space line-height">
+                                  <div class="mb-1 ml-5"><span class="font-weight-bold">Join Date : </span> {{worker.join_date}} </div>
+                                  <div class="mb-1 ml-5"><span class="font-weight-bold">Gold Toot / Work : </span> {{worker.gold_toot|floatformat:'-3'}} % </div>
+                                  <div class="mb-1 ml-5"><span class="font-weight-bold">Work State : </span> {{worker.state}} </div>
+                                  {% if worker.left_date %}
+                                  <div class="mb-1 ml-5 text-danger"><span class="font-weight-bold">Left Date : </span> {{worker.left_date}} </div>
+                                  {% endif %}
+                                  <div class="my-3 ml-5 d-flex justify-content-between">
+                                        <div class="text-success"><span class="font-weight-bold">Paid : </span> {{worker.paid|floatformat:'-3'|intcomma}} gm</div> 
+                                        <div class="text-danger"><span class="font-weight-bold">Loss : </span> {{worker.loss|floatformat:'-3'|intcomma}} gm </div>
+                                  </div>
+                                  <div class="my-3 ml-5 d-flex justify-content-between">
+                                        <a href="#jewellery"><div class="text-purple"><span class="font-weight-bold">Jewellery : </span> {{worker.total_work|floatformat:'-3'|intcomma}} gm</div></a>
+                                        <a href="#repairing"><div class="text-purple"><span class="font-weight-bold">Repairing : </span> {{passbook_detail_repairing.count|intcomma}} gm </div></a>
+                                  </div>
+                            </div>
+                      </div>
+
+                      <div class="row mt-5 shadow-lg p-3 text-center" id="jewellery">
+                              <div class="col-12 footlight-mt-light h1">Jewellery Work</div>
+                                <table class="table table-responsive col-12 footlight-mt-light word-space">
+                                    <thead class="bg-warning text-dark h5">
+                                          <th>Sr. No</th>
+                                          <th >Date</th>
+                                          <th >Jewellery</th>
+                                          <th >Jeweller's Name</th>
+                                          <th>Gold Purity</th>
+                                          <th>Total Gold</th>
+                                          <th>KDM</th>
+                                          <th>Extra Gold</th>
+                                          <th>Net Weight</th>
+                                          <th>Gold To Be Given</th>
+                                          <th>Gold Given</th>
+                                          <th>Loss</th>
+                                          <th>Paid</th>
+                                          <th>Finish Date</th>
+                                          <th>Comment</th>
+                                    </thead>
+                                    <tbody>
+                                      {% for passbook in passbook_detail %}
+                                          {% if passbook.finish_date %}
+                                          <tr>
+                                                <td>{{forloop.revcounter}}</td>
+                                                <td>{{passbook.start_date|date:'d M Y'}}</td>
+                                                <td><a href="{% url 'jewellery-detail' passbook.pk %}">{{passbook.jewellery_name}}</a></td>
+                                                <td>{{passbook.jewellery_owner_name}}</td>
+                                                <td>{{passbook.gold_purity|floatformat:'-2'}}  %</td>
+                                                <td>{{passbook.total_gold|floatformat:'-3'|intcomma}} gm</td>
+                                                <td>{{passbook.KDM|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.extra_gold|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.jewellery_net_weight|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.gold_to_be_given|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.gold_given|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.loss|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.paid|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.finish_date|date:'d M Y'}} </td>
+                                                {% if passbook.comment %}
+                                                <td>{{passbook.comment}} </td>
+                                                {% else  %}
+                                                <td> - </td>
+                                                {% endif %}
+                                          </tr>
+                                          {% endif %}
+                                      {% endfor %}
+                                    </tbody>
+                                </table>
+                      </div>
+
+                      <div class="row mt-5 shadow-lg p-3 text-center" id="repairing">
+                              <div class="col-12 footlight-mt-light h1">
+                              Jewellery Repairing Work</div>
+                                <table class="table table-responsive col-12 footlight-mt-light word-space">
+                                    <thead class="bg-warning text-dark h5">
+                                          <th>Sr. No</th>
+                                          <th >Date</th>
+                                          <th >Jewellery</th>
+                                          <th >Jeweller's Name</th>
+                                          <th>Total Gold</th>
+                                          <th>KDM</th>
+                                          <th>Extra Gold</th>
+                                          <th>Net Weight</th>
+                                          <th>Gold To Be Given</th>
+                                          <th>Gold Given</th>
+                                          <th>Loss</th>
+                                          <th>Paid</th>
+                                          <th>Finish Date</th>
+                                          <th>Comment</th>
+                                    </thead>
+                                    <tbody>
+                                      {% for passbook in passbook_detail_repairing %}
+                                          {% if passbook.finish_date %}
+                                          <tr>
+                                                <td>{{forloop.revcounter}}</td>
+                                                <td>{{passbook.start_date|date:'d M Y'}}</td>
+                                                <td><a href="{% url 'repairing-detail' passbook.pk %}">{{passbook.jewellery_name}}</a></td>
+                                                <td>{{passbook.jewellery_owner_name}}</td>
+                                                <td>{{passbook.total_gold|floatformat:'-3'|intcomma}} gm</td>
+                                                <td>{{passbook.KDM|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.extra_gold|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.jewellery_net_weight|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.gold_to_be_given|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.gold_given|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.loss|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.paid|floatformat:'-3'|intcomma}}  gm</td>
+                                                <td>{{passbook.finish_date|date:'d M Y'}} </td>
+                                                {% if passbook.comment %}
+                                                <td>{{passbook.comment}} </td>
+                                                {% else  %}
+                                                <td> - </td>
+                                                {% endif %}
+                                          </tr>
+                                          {% endif %}
+                                      {% endfor %}
+                                    </tbody>
+                                </table>
+                      </div>
+              </div>
+{% endblock %}
+
+
+{% load static %}
+{% block js %}
+{% endblock js %}

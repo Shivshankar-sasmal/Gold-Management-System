@@ -1,0 +1,16 @@
+{% autoescape off %}
+<div style="font-family: Footlight Mt Light; padding: 15px; text-align: center;">
+	<h3 style="font-size: 30px; color: indigo;">Hi {{worker}},</h3>
+	<br>
+	<h3>You Have Given a Jewellery Work By <br>
+		<span style="color: red;">{{owner}}</span><br>
+		at <span style="color: orange;">{{date}}</span>
+	</h3>
+	<br>
+	<h3>Jewellery Name : {{jewellery_name}}</h3>
+	<h3>Gold Purity : {{gold_purity|floatformat:'-2'}} %</h3>
+	<h3>Total Gold : {{total_gold|floatformat:'-3'}} gm</h3>
+	<h3>KDM : {{KDM|floatformat:'-3'}} gm</h3>
+	<h3>Net Weight : {{net_weight|floatformat:'-3'}} gm</h3>
+</div>
+{% endautoescape %}

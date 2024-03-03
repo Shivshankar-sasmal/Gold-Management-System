@@ -1,0 +1,88 @@
+{% extends 'jewellery/base.html' %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% block css %}
+      <link rel="stylesheet" href="{% static 'jewellery/js/jquery-ui-1.12.1/jquery-ui.min.css' %}">
+      <link rel="stylesheet" href="{% static 'jewellery/js/jquery-ui-1.12.1/jquery-ui.structure.min.css' %}">
+      <link rel="stylesheet" href="{% static 'jewellery/js/jquery-ui-1.12.1/jquery-ui.theme.min.css' %}">
+      <title>Repairing Create & Update</title>
+{% endblock %}
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+              <div class="container profile">
+                <div class="row justify-content-around">
+                          {% if object %}
+                              <div class="col-12 col-lg-4 col-md-6 p-3 text-small ">
+                                    <span class="event-profile-font h5 text-muted">Work By : <kbd class="bg-primary px-3 event-profile-font">{{object.worker_name.owner.first_name}}</kbd></span>
+                                    <div class="p-5 shadow mt-3">
+                                            <div class="d-flex">
+                                                            <a href=""><img src="{{object.worker_name.image.url}}" class="img-fluid img-event-profile"></a>
+                                                            <a href=""><h3 class="my-auto ml-3 slogan word-break">{{object.worker_name.full_name|truncatewords:1}}</h3></a>
+                                            </div>
+                                                    <div class="event-profile-font date-margin small-font">{{object.start_date}}</div>
+                                                    <div class="ml-5 my-3 event-profile-font">
+                                                          <a href="{% url 'repairing-detail' object.pk %}" class="h1 footlight-mt-light text-dark">{{object.jewellery_name|title}}</a>
+                                                    </div>
+                                                    <div class="mt-4 row justify-content-around text-center">
+                                                          <kbd class="col-12  bg-warning p-2 event-profile-font h6">Total Gold : {{object.total_gold|floatformat:'-3'}} gm</kbd>
+                                                          <kbd class="col-12  silver p-2 event-profile-font h6">KDM : {{object.KDM|floatformat:'-3'}} gm</kbd>
+                                                          <kbd class="col-12  bronze p-2 event-profile-font h6">Extra Gold : {{object.extra_gold|floatformat:'-3'}} gm</kbd>
+                                                          <kbd class="col-12  bg-success  p-2 event-profile-font h6">Net Weight : {{object.jewellery_net_weight|floatformat:'-3'|intcomma}} gm</kbd>
+                                                    </div>
+                                                    <div class="h4 word-space my-3 font-weight-bold row text-center text-purple justify-content-around">
+                                                        <kbd class="col-12 py-2 text-white purple footlight-mt-light mt-1">Gold To Give <br> {{object.gold_to_be_given|floatformat:'-3'|intcomma}} gm</kbd>
+                                                    </div>
+                                                    <div class="mt-4 event-profile-font">
+                                                        <i class="fa fa-clock-o fa-2x text-danger"></i>
+                                                        <span class="h5 ml-1">{{object.start_date|naturaltime}}</span>
+                                                    </div>
+                                                    <br>
+                                                    <div class="event-profile-font date-margin h6 text-right mt-1">{{object.jewellery_owner_name}}</div>
+                                                  </div>
+                                </div>
+                          {% else %}
+                              <div class="col-12 col-lg-6 col-md-6 my-3 p-3 text-small my-auto imgs">
+                                   <img src="{% static 'jewellery/images/default/undraw_remotely_2j6y.png' %}" alt="" class="img-fluid py-auto">
+                                   <div class="p-5 slogan h2 text-center text-warning">
+                                       Repair Jewelleries With Best Workers
+                                   </div>
+                              </div>
+                          {% endif %}
+
+                            <div class="col-12 col-lg-6 col-md-11 shadow py-4 mb-auto mt-3">
+                                  <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                                    {% csrf_token %}
+                                      <fieldset>
+                                             <legend class="border-bottom py-2 slogan pl-3"><big>Repairing Jewellery Info</big></legend>
+                                      </fieldset>
+
+                                      <div class="text-small container row-center" >
+                                           <div class="col-12">
+                                                {{form|crispy}}
+                                           </div>
+                                </div>
+
+                                <div class="form-group text-center pt-4">
+                                          <button class="btn btn-outline-primary" type="submit">
+                                            {% if object %}
+                                            Update
+                                            {% else %}
+                                            Create
+                                            {% endif %}
+                                          </button>
+                                </div>
+                          </form>
+                       </div>
+                  </div>
+          </div>
+{% endblock %}
+
+
+{% load static %}
+{% block js %}
+      <script type="text/javascript" src="{% static 'jewellery/js/jquery-ui-1.12.1/jquery-ui.js' %}"></script>
+      <script type="text/javascript" src="{% static 'jewellery/js/django-main.js' %}"></script>
+{% endblock js %}

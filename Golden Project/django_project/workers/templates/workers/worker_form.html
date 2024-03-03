@@ -1,0 +1,125 @@
+{% extends 'jewellery/base.html' %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% block css %}
+      <title>Register Your Details</title>
+{% endblock css %}
+
+
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="container login-registration">
+      <div class="row shadow-lg py-5 m-1">
+            <div class="col-12">
+                  <h2 class="text-center slogan">Register Worker</h2>
+                <hr>
+            </div>
+            {% if object %}
+            <div class="col-12 col-lg-4 col-md-6 profile mx-auto">
+                        
+                        <div class="card">
+                                <div class="card-image">
+                                      <img src="{% static 'jewellery/images/default/undraw_authentication_fsn5.png' %}" alt="" class="pt-3">
+                                </div>                     
+                                <div class="profile-image">
+                                       <img src="{{object.image.url}}" alt="">
+                                </div>
+                                <div class="card-content">
+                                      <h2 class="pt-3 slogan">{{object.full_name}}</h2>
+                                      <h5 class="text-danger event-profile-font">{{object.username}}</h5>
+                                      <h5 class="mt-3"><i class="fa fa-phone text-success"></i> <small class="event-profile-font word-break"><a href="tel:+91{{object.phone}}" class="ml-2 text-dark">+91{{object.phone}}</a></small></h5>
+                                      <h5><i class="fa fa-envelope text-danger"></i> <small class="event-profile-font word-break ml-2"><a href="mailto:{{object.email}}" class="text-dark">{{object.email}}</a></small></h5>
+                                      <h5 class="mt-3 text-dark"><i class="fa fa-address-card"></i> <small class="event-profile-font word-break ml-2">Aadhar Card ( {{object.aadhar_card}} )</small></h5>
+                                      <h5 class=" text-purple"><small class="event-profile-font word-break ml-2">Skills : ( {{object.skills}} )</small></h5>
+                                      <blockquote class="container text-muted event-profile-font">
+                                        <i class="fa fa-map-o text-secondary mr-2"></i>
+                                          {{object.address}}
+                                      </blockquote> 
+                                </div>
+                                {% if object.left_date %}
+                                <div class="text-center mb-2">
+                                      <h3 class="bg-warning text-white"><small class="event-profile-font word-break ml-2">Left : {{object.left_date|date:'d M Y'}}</small></h3>
+                                </div>
+                                {% endif %}
+                                <div class="footlight-mt-light d-flex justify-content-around h5">
+                                    <div class="text-danger">Loss : {{object.loss|floatformat:'-3'|intcomma}} gm</div>
+                                    <div class="text-success">Paid : {{object.paid|floatformat:'-3'|intcomma}} gm</div>
+                                </div>
+                                <hr>
+                                <div class="pb-3 d-flex justify-content-around">
+                                    <a href="https://www.google.co.in/maps/dir//{{object.state}}/" class="text-dark"><i class="fa fa-map-marker fa-2x text-primary"></i></a>
+                                    <span class="event-profile-font"><a href="https://www.google.co.in/maps/dir//{{object.state}}/" class="text-dark">{{object.state}}</a></span>
+                                </div>
+                        </div>
+                      </div>        
+            {% else  %}
+            <div class="col-12 col-lg-5 col-md-6 imgs">
+                  <img src="{% static 'jewellery/images/default/undraw_hey_email_liaa.png' %}" alt="" class="img-fluid">
+
+                  <div class="event-profile-font p-5 text-big text-muted">
+                        We are Metal Workers who specialize in working with gold & precious metals
+                        <br><br>
+                        We are Professionals with a good understanding of the jewellery industry, that work with gold as well as other precious metals or gemstones
+                  </div>
+            </div>      
+            {% endif %}  
+            <div class="col-12 col-lg-7 col-md-9 row-center pr-3">
+                  <div class="login-container py-3">
+                      <img src="{% static 'jewellery/images/default/undraw_Designer_by46.png' %}" alt="" class="avatar mx-auto">
+                  </div>
+                  <h2 class="text-center text-primary slogan">FILL DETAILS, HERE</h2>
+
+                  <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                          {% csrf_token %}
+
+                          <div class="text-small form-group">
+                              <div class="row">
+                                    <div class="col-12 col-lg-4 col-md-4">
+                                          {{form.username|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12 col-lg-8 col-md-8">
+                                          {{form.full_name|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12 col-lg-4 col-md-3">
+                                          {{form.phone|as_crispy_field}}
+                                    </div>
+                                    {% if not object%}
+                                    <div class="col-12 col-lg-8 col-md-9">
+                                          {{form.email|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12 col-lg-5 col-md-5">
+                                          {{form.aadhar_card|as_crispy_field}}
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-12 col-lg-7 col-md-7">
+                                          {{form.state|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12">
+                                          {{form.skills|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12">
+                                          {{form.address|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12 col-lg-5 col-md-5">
+                                          {{form.gold_toot|as_crispy_field}}
+                                    </div>
+                                    <div class="col-12 col-lg-7 col-md-7">
+                                          {{form.image|as_crispy_field}}
+                                    </div>
+                              </div>
+                          </div>
+                          <div class="form-group text-center">
+                              <button class="btn btn-outline-primary" type="submit">Submit</button>
+                          </div>
+            </form>
+          </div>
+      </div>
+</div>
+{% endblock content %}
+
+{% load static %}
+{% block js %}
+{% endblock js %}
+

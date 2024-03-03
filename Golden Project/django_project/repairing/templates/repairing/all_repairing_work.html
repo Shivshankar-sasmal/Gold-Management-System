@@ -1,0 +1,101 @@
+{% extends 'jewellery/base.html' %}
+
+{% block css %}
+      <title>All Repairing Work</title>
+{% endblock %}
+
+{% load humanize %}
+{% load static %}
+{% block content %}
+            <div class="container-fluid home">
+                  <div class="row justify-content-center my-2">
+                        <a href="{% url 'jewellery-all' %}" class="col-10 col-lg-2 col-md-2 btn btn-outline-info m-1 px-3 event-profile-font">All Jewellery Work</a>
+                        <a href="{% url 'repairing-all' %}" class="col-10 col-lg-2 col-md-2 btn bg-success text-white m-1 px-3 event-profile-font">All Repairing Work</a>
+                        <a href="{% url 'jewellery-order' %}" class="col-10 col-lg-2 col-md-2 btn btn-outline-danger m-1 px-3 event-profile-font">Order Work</a>
+                        <a href="{% url 'repairing' %}" class="col-10 col-lg-2 col-md-2 btn btn-outline-secondary m-1 px-3 event-profile-font">Repairings</a>
+                  </div>
+                  <form action="{% url 'repairing-all' %}"  autocomplete="off" method="GET">
+                        <div class="p-1 rounded-pill shadow-sm mb-4 d-flex container">
+                                    <input type="search" autocomplete="off" placeholder="What are you looking for ?" class="form-control border-0 rounded-pill pl-4" name="search" value="{{request.GET.search}}">
+                                    <button type="submit" class="btn btn-link text-primary"> <i class="fa fa-search"></i> </button> 
+                        </div>    
+                  </form>      
+
+                  <div class="row row-center justify-content-around container-95">
+                        {% for jewellery in jewelleries_repairing %}
+                           <div class="col-12 col-lg-3 col-md-6 p-5 m-1 shadow rounded-raised mb-5">
+                                    <div class="d-flex">
+                                            <a href="{% url 'worker-update' jewellery.worker_name.pk %}"><img src="{{jewellery.worker_name.image.url}}" class="img-fluid img-event-profile"></a>
+                                            <a href="{% url 'worker-update' jewellery.worker_name.pk %}"><h3 class="my-auto ml-3 slogan word-break">{{jewellery.worker_name.full_name|truncatewords:1}}</h3></a>
+                                    </div>
+
+                                    <div class="event-profile-font date-margin small-font">{{jewellery.start_date}}</div>
+
+                                    <div class="ml-5 my-3 event-profile-font">
+                                          <div class="event-profile-font text-danger h5  pt-1">Repairing</div>
+                                          <a href="{% url 'repairing-detail' jewellery.pk %}" class="h1 footlight-mt-light text-dark">{{jewellery.jewellery_name|title}}</a>
+
+                                          <div class="mt-3 h6">
+                                                <kbd class="purple event-profile-font word-space">Net Weight : {{jewellery.jewellery_net_weight|floatformat:'-3'|intcomma}} gm</kbd>
+                                          </div>                
+                                    </div>
+
+                                    <div class="mt-4 event-profile-font">
+                                        <i class="fa fa-clock-o fa-2x pr-2 text-danger"></i>
+                                        <span class="h5">{{jewellery.start_date|naturaltime}}</span>
+                                    </div>
+
+                                    <br>
+                                    {% if jewellery.urgent_work_date %}
+                                        <div class="bg-danger event-profile-font text-center text-white p-1">Order : {{jewellery.urgent_work_date|date:'d M Y'}}</div>
+                                    {% endif %}
+
+                                    {% if jewellery.finish_date %}
+                                        <div class="bg-warning event-profile-font text-center text-white p-1 my-1">Finish Date : {{jewellery.finish_date|date:'d M Y'}}</div>
+                                    {% endif %}
+
+                                    {% if jewellery.comment %}
+                                        <blockquote class="text-center event-profile-font mt-3">
+                                          <span class="text-danger h5">Comment</span> 
+                                        <br>
+                                        <span class="text-muted h6">{{jewellery.comment}}</span>
+                                       </blockquote>
+                                    {% endif %}
+
+                                    <div class="event-profile-font date-margin h6 text-right mb-4 mt-2">{{jewellery.jewellery_owner_name}}</div>
+                                    <div class="text-center">
+                                        <a href="{% url 'worker-passbook' jewellery.worker_name.pk %}" class="btn btn-outline-primary event-profile-font m-1">Passbook</a>
+                                        {% if not jewellery.finish_date %}
+                                        <a href="{% url 'repairing-submit' jewellery.pk %}" class="btn btn-outline-success event-profile-font m-1">Submit Work</a>
+                                        {% endif %}
+                                    </div>
+                           </div>
+                           {% endfor %}
+                  </div>
+
+                  {% if is_paginated %}
+                  <div class="my-4 text-center">
+                        {% if page_obj.has_previous %}
+                                    <a href="?page=1{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-outline-info">First</a>
+                        {% endif %}
+
+                        {% for num in  page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                                <a href="?page={{num}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-danger">{{num}}</a>
+                                    {% elif num > page_obj.number|add:'-3' and  num < page_obj.number|add:'3' %}
+                                    <a href="?page={{num}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-outline-info">{{num}}</a>
+                                    {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                              <a href="?page={{page_obj.paginator.num_pages}}{% if request.GET.search %}&search={{request.GET.search}}{% endif %}" class="btn btn-outline-info">Last</a>
+                        {% endif %}
+                  </div>
+                  {% endif %} 
+            </div>
+{% endblock %}
+
+
+{% load static %}
+{% block js %}
+{% endblock js %}
